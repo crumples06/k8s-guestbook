@@ -1,0 +1,35 @@
+# api.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata: { name: guestbook-api }
+spec:
+  replicas: 3
+  selector: { matchLabels: { app: guestbook-api } }
+  template:
+    metadata: { labels: { app: guestbook-api } }
+    spec:
+      containers:
+        - name: api
+          image: guestbook-api:1.0
+          imagePullPolicy: IfNotPresent
+          ports: [{ containerPort: 3000 }]
+          envFrom:
+            - configMapRef: { name: guestbook-config }
+          env:
+            - name: DB_PASSWORD
+              valueFrom: { secretKeyRef: { name: mysql-secret, key: DB_PASSWORD } }
+          readinessProbe:
+            httpGet: { path: /healthz, port: 3000 }
+          livenessProbe:
+            httpGet: { path: /healthz, port: 3000 }
+            initialDelaySeconds: 20
+          resources:
+            requests: { cpu: 50m, memory: 64Mi }
+            limits: { memory: 128Mi }
+---
+apiVersion: v1
+kind: Service
+metadata: { name: guestbook-api }
+spec:
+  selector: { app: guestbook-api }
+  ports: [{ port: 80, targetPort: 3000 }]

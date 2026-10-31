@@ -1,0 +1,18 @@
+apiVersion: v1
+kind: ConfigMap
+metadata: { name: guestbook-config }
+data:
+  DB_HOST: mysql
+  DB_PORT: "3306"
+  DB_NAME: guestbook
+  DB_USER: guestbook
+
+---
+
+apiVersion: v1
+kind: Secret
+metadata: { name: mysql-secret }
+type: Opaque
+stringData:
+  MYSQL_ROOT_PASSWORD: root 
+  DB_PASSWORD: devpass
