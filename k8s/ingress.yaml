@@ -1,9 +1,9 @@
-apiVersion: networking.k8s.io/v1
-kind: Ingress
+apiVersion: gateway.networking.k8s.io/v1
+kind: Gateway
 metadata: { name: guestbook }
 spec:
-  ingressClassName: nginx
-  rules:
+  gatewayClassName: nginx
+  listeners:
     - host: guestbook.local
       http:
         paths:
