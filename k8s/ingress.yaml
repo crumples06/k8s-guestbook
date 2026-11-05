@@ -4,7 +4,7 @@ metadata: { name: guestbook }
 spec:
   ingressClassName: nginx
   rules:
-    - host: guestbook.local
+    - host: localhost
       http:
         paths:
           - path: /
